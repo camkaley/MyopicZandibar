@@ -61,8 +61,6 @@ function rollYoutubeVideo(message) {
       .setAuthor(video.snippet.channelTitle)
       .setImage(video.snippet.thumbnails.medium.url)
       
-      newEmbed.video = "test"
-      console.log(newEmbed)
       message.channel.send(config.sarcasticInsults[chance(config.sarcasticInsults.length)])
       message.channel.send(newEmbed)
     })
