@@ -1,0 +1,59 @@
+{
+	"serverId": "231813619728252938",
+	"botId": "Delusion Advisor#0351",
+	"insults": [
+		"You couldnt be further from the point mate.",
+		"What a stupid opinion.",
+		"Please. Just stop.",
+		"Fucking hell, will you ever quit talking shit?",
+		"I dont even know why i read your messages any more.",
+		"Out of all the dumb things you say, this one takes the cake.",
+		"You just out-do yourself every time dont you?",
+		"Shut the fuck up. Like seriously. Just shut the fuck up.",
+		"You have as much talent as a giraffe in dark glasses trying to get into a polar-bears-only club.",
+		"Dont use long words to make yourself sound smart, buddy.",
+		"I dont think ive ever heard anything dumber than that to be honest.",
+		"You are a sad strange little man, and you have my pity.",
+		"Look at this guy :joy:",
+		"Do you even read your messages before you send them?",
+		"No wonder your parents tell their friends you're dead.",
+		"Shut up you fucking paramecium.",
+		"Ohhhhh myyyyy god shutttt up.",
+		"Im a bot without emotions, but reading that made me angry as fuck.",
+		"Listen to this virgin LMAO.",
+		"Alright, sit down kiddo, you've made yourself look dumb enough.",
+		"Evidently, you have the intellectual capacity that would have a tough time challenging a fucking pool noodle.",
+		"Keep that shit up and ill delete the whole fucking server.",
+		"You're seriously as sharp as a spoon hey?"
+	],
+	"sarcasticInsults": [
+		"Thats super insightful, really really interesting mate, but have you heard about this?",
+		"Cool story bro, check this out",
+		"Why would you even care when this exists?",
+		"You probably watch youtube videos like this hey",
+		"Here this might be a little more your speed",
+		"If you think thats cool, check this out",
+		"Wow dude thats really amazing so cool. Watch this and learn:",
+		"Give this a geeze retard"
+	],
+	"emojis": [
+		"btc",
+		"elmo",
+		"sadsully",
+		"sadfugg",
+		"concernedfrog",
+		"KSI",
+		"stickem",
+		"yamba",
+		"doit",
+		"African",
+		"lard",
+		"reyne",
+		"gerry",
+		"catjam"
+	],
+	"rollChances": {
+		"randomReactChance": 12,
+		"rollInsultChanceNonTarget": 15
+	}
+}

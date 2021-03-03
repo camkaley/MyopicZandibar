@@ -2,10 +2,11 @@ const Axios = require("axios");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config/config.json");
+const apiKeys = require("./config/apiKeys.json")
 
 var target = null;
 
-client.login(config.token);
+client.login(apiKeys.discordToken);
 client.once("ready", () => {
   console.log(`Connected to: ${getGuild(client.guilds)}`);
 });
@@ -52,13 +53,16 @@ function rollInsult(message) {
 function rollYoutubeVideo(message) {
   if (chance(1) === 0 && getAuthor(message) !== config.botId) {
     getRandomVideo().then(video => {
-      console.log(video.snippet.thumbnails)
+      var url = "https://www.youtube.com/watch?v=" + video.id.videoId
       const newEmbed = new Discord.MessageEmbed()
       .setColor("#ff00fb")
       .setTitle(video.snippet.title)
-      .setURL("https://www.youtube.com/watch?v=" + video.id.videoId)
+      .setURL(url)
       .setAuthor(video.snippet.channelTitle)
       .setImage(video.snippet.thumbnails.medium.url)
+      
+      newEmbed.video = "test"
+      console.log(newEmbed)
       message.channel.send(config.sarcasticInsults[chance(config.sarcasticInsults.length)])
       message.channel.send(newEmbed)
     })
@@ -69,7 +73,7 @@ function getRandomVideo() {
   return new Promise((resolve) => {
     var url =
       "https://www.googleapis.com/youtube/v3/search?key=" +
-      config.googleAPIKey +
+      apiKeys.googleAPIKey +
       "&maxResults=" +
       1 +
       "&part=snippet&type=video&q=" +
