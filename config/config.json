@@ -54,6 +54,7 @@
 	],
 	"rollChances": {
 		"randomReactChance": 12,
-		"rollInsultChanceNonTarget": 15
+		"rollInsultChanceNonTarget": 15,
+		"rollYoutubeVideoChance": 20
 	}
 }

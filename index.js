@@ -17,7 +17,7 @@ client.on("message", (message) => {
   //Roll Insult
   rollInsult(message);
   //Roll target change
-  //   rollTargetChange(message)
+  //rollTargetChange(message)
   //Roll youtube video
   rollYoutubeVideo(message);
 });
@@ -51,7 +51,7 @@ function rollInsult(message) {
 }
 
 function rollYoutubeVideo(message) {
-  if (chance(1) === 0 && getAuthor(message) !== config.botId) {
+  if (chance(config.rollChances.rollYoutubeVideoChance) === 0 && getAuthor(message) !== config.botId) {
     getRandomVideo().then(video => {
       var url = "https://www.youtube.com/watch?v=" + video.id.videoId
       const newEmbed = new Discord.MessageEmbed()
