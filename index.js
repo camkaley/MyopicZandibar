@@ -14,13 +14,28 @@ client.once("ready", () => {
 client.on("message", (message) => {
   //Add vote reactions
   reactVoteOptions(message);
+
   //Roll Insult
   rollInsult(message);
+
   //Roll target change
   //rollTargetChange(message)
+
   //Roll youtube video
   rollYoutubeVideo(message);
+
+  //Sick em zandy
+  sickEm(message);
 });
+
+function sickEm(message) {
+  if(message.content === "Sick em zandy"){
+    message.channel.messages.fetch({limit: 2}).then(messages => {
+      var targetAuthor = messages.last().author.toString()
+      message.channel.send(`${targetAuthor}. ${config.insults[chance(config.insults.length)]}`)
+    })
+  }
+}
 
 function reactVoteOptions(message) {
   //Define react emojis
