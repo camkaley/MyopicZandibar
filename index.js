@@ -3,8 +3,10 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config/config.json");
 const apiKeys = require("./config/apiKeys.json")
+const teamSorting = require("./teamSorting")
 
-var target = null;
+var target = "ReyneBowKitten#7296";
+// var target = "BiscuitMan#8864";
 
 client.login(apiKeys.discordToken);
 client.once("ready", () => {
@@ -12,6 +14,7 @@ client.once("ready", () => {
 });
 
 client.on("message", (message) => {
+
   //Add vote reactions
   reactVoteOptions(message);
 
@@ -26,6 +29,9 @@ client.on("message", (message) => {
 
   //Sick em zandy
   sickEm(message);
+
+  //Check if reyne
+  checkReyne(message)
 });
 
 function sickEm(message) {
@@ -37,6 +43,26 @@ function sickEm(message) {
   }
 }
 
+function checkReyne(message) {
+
+  var comebacks = ["Fuck you're funny", "Commedy genius over here", "Wow the same joke again!"]
+
+  if(getAuthor(message) === target){
+    message.react(getEmoji(message, "yamba"))
+    message.react(getEmoji(message, "reyne"))
+    message.react(getEmoji(message, "garry"))
+    message.react(getEmoji(message, "drive"))
+    message.react(getEmoji(message, "laugh"))
+    message.react(getEmoji(message, "wow"))
+    message.react(getEmoji(message, "simp"))
+    message.react(getEmoji(message, "retard"))
+    message.react(getEmoji(message, "eggplant"))
+    message.react(getEmoji(message, "wicked"))
+
+    message.channel.send(comebacks[chance(3)])
+  }
+}
+
 function reactVoteOptions(message) {
   //Define react emojis
   var upArrow = getEmoji(message, "UpArrow");
@@ -45,15 +71,6 @@ function reactVoteOptions(message) {
   if (message.attachments.size) {
     message.react(upArrow);
     message.react(downArrow);
-  } else {
-    if (Math.random() < 1 / config.rollChances.randomReactChance) {
-      message.react(
-        getEmoji(
-          message,
-          config.emojis[Math.floor(Math.random() * config.emojis.length)]
-        )
-      );
-    }
   }
 }
 
