@@ -48,7 +48,7 @@ function checkReyne(message) {
   var comebacks = ["Fuck you're funny", "Commedy genius over here", "Wow the same joke again!"]
 
   if(getAuthor(message) === target){
-    message.react(getEmoji(message, "yamba"))
+    message.react(getEmoji(message, "Yamba"))
     message.react(getEmoji(message, "reyne"))
     message.react(getEmoji(message, "garry"))
     message.react(getEmoji(message, "drive"))
