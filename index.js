@@ -57,7 +57,7 @@ function checkReyne(message) {
     message.react(getEmoji(message, "simp"))
     message.react(getEmoji(message, "retard"))
     message.react(getEmoji(message, "eggplant"))
-    message.react(getEmoji(message, "wicked"))
+    message.react(getEmoji(message, "WICKED"))
 
     message.channel.send(comebacks[chance(3)])
   }
