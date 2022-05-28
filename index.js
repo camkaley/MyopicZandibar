@@ -1,9 +1,10 @@
 const Axios = require("axios");
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"] });
 const config = require("./config/config.json");
 const apiKeys = require("./config/apiKeys.json")
-const teamSorting = require("./teamSorting")
+const song = createAudioResource('./Chippy.mp3');
 
 var target = "ReyneBowKitten#7296";
 // var target = "BiscuitMan#8864";
@@ -12,6 +13,29 @@ client.login(apiKeys.discordToken);
 client.once("ready", () => {
   console.log(`Connected to: ${getGuild(client.guilds)}`);
 });
+
+client.on('voiceStateUpdate', (oldState, newState) => {
+  // check for bot
+  if (oldState.member.user.bot) return;
+
+  if(newState.channel && newState.channel.id === "269438526137958400"){
+
+    const player = createAudioPlayer();
+
+    const connection = joinVoiceChannel({
+      channelId: newState.channel.id,
+      guildId: newState.channel.guild.id,
+      adapterCreator: newState.channel.guild.voiceAdapterCreator,
+    });
+
+    player.play(song);
+    connection.subscribe(player)
+
+    setTimeout(() => {
+      connection.destroy()
+    }, 11000)
+  }
+})
 
 client.on("message", (message) => {
 
