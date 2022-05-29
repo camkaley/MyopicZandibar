@@ -32,6 +32,8 @@ client.on('voiceStateUpdate', (oldState, newState) => {
     connection.subscribe(player)
 
     setTimeout(() => {
+      player.stop()
+      connection.disconnect()
       connection.destroy()
     }, 11000)
   }
