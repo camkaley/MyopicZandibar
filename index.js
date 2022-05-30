@@ -32,6 +32,9 @@ client.once("ready", () => {
     if(channelList.length){
       voiceInsult(channelList[chance(channelList.length)])
     }
+    else {
+      console.log("Nobody in chat")
+    }
   }, 6180000);
 });
 
