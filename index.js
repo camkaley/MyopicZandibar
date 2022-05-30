@@ -29,7 +29,9 @@ client.once("ready", () => {
       }
     });
   
-    voiceInsult(channelList[chance(channelList.length)])
+    if(channelList.length){
+      voiceInsult(channelList[chance(channelList.length)])
+    }
   }, 6180000);
 });
 
