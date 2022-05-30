@@ -26,6 +26,20 @@
 		"Keep that shit up and ill delete the whole fucking server.",
 		"You're seriously as sharp as a spoon hey?"
 	],
+	"voiceInsults": [
+		"Shut the fuck up. Like seriously. Just shut the fuck up.",
+		"Fucking hell, will you ever quit talking shit?",
+		"Please. Just stop.",
+		"sit down kiddo, you've made yourself look dumb enough.",
+		"Keep that shit up and ill delete the whole fucking server.",
+		"Evidently, you have the intellectual capacity that would have a tough time challenging a fucking pool noodle.",
+		"Listen to this virgin LMAO.",
+		"Im a bot without emotions, but you make me angry as fuck.",
+		"Shut up you fucking paramecium.",
+		"No wonder your parents tell their friends you're dead.",
+		"I dont think ive ever heard anything dumber than that to be honest.",
+		"Get good"
+	],
 	"sarcasticInsults": [
 		"Thats super insightful, really really interesting mate, but have you heard about this?",
 		"Cool story bro, check this out",
@@ -53,7 +67,7 @@
 		"catjam"
 	],
 	"rollChances": {
-		"randomReactChance": 12,
+		"randomReactChance": 0,
 		"rollInsultChanceNonTarget": 15,
 		"rollYoutubeVideoChance": 20
 	}

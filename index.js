@@ -1,10 +1,17 @@
 const Axios = require("axios");
 const Discord = require("discord.js");
-const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"] });
+const {
+  joinVoiceChannel,
+  createAudioPlayer,
+  createAudioResource,
+} = require("@discordjs/voice");
+const client = new Discord.Client({
+  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"],
+});
 const config = require("./config/config.json");
-const apiKeys = require("./config/apiKeys.json")
-const song = createAudioResource('./Chippy.mp3');
+const apiKeys = require("./config/apiKeys.json");
+const txtomp3 = require("text-to-mp3");
+const fs = require("fs");
 
 var target = "ReyneBowKitten#7296";
 // var target = "BiscuitMan#8864";
@@ -12,33 +19,57 @@ var target = "ReyneBowKitten#7296";
 client.login(apiKeys.discordToken);
 client.once("ready", () => {
   console.log(`Connected to: ${getGuild(client.guilds)}`);
+
+  setInterval(() => {
+    var channelList = []
+    client.channels.cache.map((channel) => {
+      // console.log(channel.name, channel.id)
+      if (channel.type === "GUILD_VOICE" && channel.members.size > 0) {
+        channelList.push(channel);
+      }
+    });
+  
+    voiceInsult(channelList[chance(channelList.length)])
+  }, 6180000);
 });
 
-client.on('voiceStateUpdate', (oldState, newState) => {
-  // check for bot
-  if (oldState.member.user.bot) return;
+function voiceInsult(channel) {
+  var nameList = [];
+  channel.members.map((member) => {
+    nameList.push(member.user.username);
+  });
 
-  if(newState.channel && newState.channel.id === "269438526137958400"){
+  const insult = `${nameList[chance(nameList.length)]} ${
+    config.voiceInsults[chance(config.voiceInsults.length)]
+  }`;
+  console.log(insult)
 
-    const player = createAudioPlayer();
+  generateSound(insult)
+    .then(() => playSound(channel))
+    .catch(() => console.log(error));
+}
 
-    const connection = joinVoiceChannel({
-      channelId: newState.channel.id,
-      guildId: newState.channel.guild.id,
-      adapterCreator: newState.channel.guild.voiceAdapterCreator,
-    });
+function playSound(channel) {
+  const sound = createAudioResource('./Sound.mp3');
+  const player = createAudioPlayer();
 
-    player.play(song);
-    connection.subscribe(player)
+  const connection = joinVoiceChannel({
+    channelId: channel.id,
+    guildId: channel.guild.id,
+    adapterCreator: channel.guild.voiceAdapterCreator,
+  });
 
-    setTimeout(() => {
-      connection.destroy()
-    }, 11000)
-  }
-})
+  player.play(sound);
+  connection.subscribe(player)
+
+  setTimeout(() => {
+    player.stop()
+    connection.disconnect()
+    connection.destroy()
+  }, 20000)
+}
 
 client.on("message", (message) => {
-
   //Add vote reactions
   reactVoteOptions(message);
 
@@ -55,35 +86,55 @@ client.on("message", (message) => {
   sickEm(message);
 
   //Check if reyne
-  checkReyne(message)
+  checkReyne(message);
 });
 
+function generateSound(string) {
+  return new Promise((resolve, reject) => {
+    txtomp3
+      .saveMP3(string, "Sound.mp3")
+      .then(function (absoluteFilePath) {
+        console.log("File saved :", absoluteFilePath);
+        resolve();
+      })
+      .catch(function (err) {
+        console.log("Error", err);
+        reject();
+      });
+  });
+}
+
 function sickEm(message) {
-  if(message.content === "Sick em zandy"){
-    message.channel.messages.fetch({limit: 2}).then(messages => {
-      var targetAuthor = messages.last().author.toString()
-      message.channel.send(`${targetAuthor}. ${config.insults[chance(config.insults.length)]}`)
-    })
+  if (message.content === "Sick em zandy") {
+    message.channel.messages.fetch({ limit: 2 }).then((messages) => {
+      var targetAuthor = messages.last().author.toString();
+      message.channel.send(
+        `${targetAuthor}. ${config.insults[chance(config.insults.length)]}`
+      );
+    });
   }
 }
 
 function checkReyne(message) {
+  var comebacks = [
+    "Fuck you're funny",
+    "Commedy genius over here",
+    "Wow the same joke again!",
+  ];
 
-  var comebacks = ["Fuck you're funny", "Commedy genius over here", "Wow the same joke again!"]
+  if (getAuthor(message) === target) {
+    message.react(getEmoji(message, "Yamba"));
+    message.react(getEmoji(message, "reyne"));
+    message.react(getEmoji(message, "garry"));
+    message.react(getEmoji(message, "drive"));
+    message.react(getEmoji(message, "laugh"));
+    message.react(getEmoji(message, "wow"));
+    message.react(getEmoji(message, "simp"));
+    message.react(getEmoji(message, "retard"));
+    message.react(getEmoji(message, "eggplant"));
+    message.react(getEmoji(message, "WICKED"));
 
-  if(getAuthor(message) === target){
-    message.react(getEmoji(message, "Yamba"))
-    message.react(getEmoji(message, "reyne"))
-    message.react(getEmoji(message, "garry"))
-    message.react(getEmoji(message, "drive"))
-    message.react(getEmoji(message, "laugh"))
-    message.react(getEmoji(message, "wow"))
-    message.react(getEmoji(message, "simp"))
-    message.react(getEmoji(message, "retard"))
-    message.react(getEmoji(message, "eggplant"))
-    message.react(getEmoji(message, "WICKED"))
-
-    message.channel.send(comebacks[chance(3)])
+    message.channel.send(comebacks[chance(3)]);
   }
 }
 
@@ -107,19 +158,24 @@ function rollInsult(message) {
 }
 
 function rollYoutubeVideo(message) {
-  if (chance(config.rollChances.rollYoutubeVideoChance) === 0 && getAuthor(message) !== config.botId) {
-    getRandomVideo().then(video => {
-      var url = "https://www.youtube.com/watch?v=" + video.id.videoId
+  if (
+    chance(config.rollChances.rollYoutubeVideoChance) === 0 &&
+    getAuthor(message) !== config.botId
+  ) {
+    getRandomVideo().then((video) => {
+      var url = "https://www.youtube.com/watch?v=" + video.id.videoId;
       const newEmbed = new Discord.MessageEmbed()
-      .setColor("#ff00fb")
-      .setTitle(video.snippet.title)
-      .setURL(url)
-      .setAuthor(video.snippet.channelTitle)
-      .setImage(video.snippet.thumbnails.medium.url)
-      
-      message.channel.send(config.sarcasticInsults[chance(config.sarcasticInsults.length)])
-      message.channel.send(newEmbed)
-    })
+        .setColor("#ff00fb")
+        .setTitle(video.snippet.title)
+        .setURL(url)
+        .setAuthor(video.snippet.channelTitle)
+        .setImage(video.snippet.thumbnails.medium.url);
+
+      message.channel.send(
+        config.sarcasticInsults[chance(config.sarcasticInsults.length)]
+      );
+      message.channel.send({ embeds: [newEmbed] });
+    });
   }
 }
 
@@ -134,7 +190,7 @@ function getRandomVideo() {
       generateString(3);
 
     Axios.get(url).then((response) => {
-      resolve(response.data.items[0])
+      resolve(response.data.items[0]);
     });
   });
 }
