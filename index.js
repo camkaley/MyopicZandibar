@@ -1,112 +1,73 @@
 const Axios = require("axios");
 const Discord = require("discord.js");
-const {
-  joinVoiceChannel,
-  createAudioPlayer,
-  createAudioResource,
-} = require("@discordjs/voice");
+const { Configuration, OpenAIApi } = require("openai");
 const client = new Discord.Client({
-  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"],
+  intents: [
+    "GUILDS",
+    "GUILD_MESSAGES",
+    "GUILD_VOICE_STATES",
+    "MESSAGE_CONTENT",
+  ],
 });
 const config = require("./config/config.json");
 const apiKeys = require("./config/apiKeys.json");
-const txtomp3 = require("text-to-mp3");
-const fs = require("fs");
 
 var target = "ReyneBowKitten#7296";
 // var target = "BiscuitMan#8864";
 
+const configuration = new Configuration({
+  apiKey: "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",
+});
+const openai = new OpenAIApi(configuration);
+
 client.login(apiKeys.discordToken);
 client.once("ready", () => {
   console.log(`Connected to: ${getGuild(client.guilds)}`);
-
-  setInterval(() => {
-    var channelList = []
-    client.channels.cache.map((channel) => {
-      // console.log(channel.name, channel.id)
-      if (channel.type === "GUILD_VOICE" && channel.members.size > 0) {
-        channelList.push(channel);
-      }
-    });
-  
-    if(channelList.length){
-      voiceInsult(channelList[chance(channelList.length)])
-    }
-    else {
-      console.log("Nobody in chat")
-    }
-  }, 6180000);
 });
 
-function voiceInsult(channel) {
-  var nameList = [];
-  channel.members.map((member) => {
-    nameList.push(member.user.username);
-  });
+client.on("messageCreate", (message) => {
+  // //Add vote reactions
+  // reactVoteOptions(message);
 
-  const insult = `${nameList[chance(nameList.length)]} ${
-    config.voiceInsults[chance(config.voiceInsults.length)]
-  }`;
-  console.log(insult)
+  // //Roll Insult
+  // rollInsult(message);
 
-  generateSound(insult)
-    .then(() => playSound(channel))
-    .catch(() => console.log(error));
-}
+  // //Roll target change
+  // //rollTargetChange(message)
 
-function playSound(channel) {
-  const sound = createAudioResource('./Sound.mp3');
-  const player = createAudioPlayer();
+  // //Roll youtube video
+  // rollYoutubeVideo(message);
 
-  const connection = joinVoiceChannel({
-    channelId: channel.id,
-    guildId: channel.guild.id,
-    adapterCreator: channel.guild.voiceAdapterCreator,
-  });
+  // //Sick em zandy
+  // sickEm(message);
 
-  player.play(sound);
-  connection.subscribe(player)
+  // //Check if reyne
+  // checkReyne(message);
 
-  setTimeout(() => {
-    player.stop()
-    connection.disconnect()
-    connection.destroy()
-  }, 20000)
-}
-
-client.on("message", (message) => {
-  //Add vote reactions
-  reactVoteOptions(message);
-
-  //Roll Insult
-  rollInsult(message);
-
-  //Roll target change
-  //rollTargetChange(message)
-
-  //Roll youtube video
-  rollYoutubeVideo(message);
-
-  //Sick em zandy
-  sickEm(message);
-
-  //Check if reyne
-  checkReyne(message);
+  //Chat GTP
+  chatGTP(message);
 });
 
-function generateSound(string) {
-  return new Promise((resolve, reject) => {
-    txtomp3
-      .saveMP3(string, "Sound.mp3")
-      .then(function (absoluteFilePath) {
-        console.log("File saved :", absoluteFilePath);
-        resolve();
+async function chatGTP(message) {
+  if (message.content.toLowerCase().startsWith("zandy")) {
+    var command = message.content.replace(/[^\s]*/, '');
+    openai
+      .createCompletion({
+        model: "text-davinci-003",
+        prompt: command,
+        temperature: 0.5,
+        max_tokens: 1000,
+        top_p: 1.0,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
       })
-      .catch(function (err) {
-        console.log("Error", err);
-        reject();
+      .then((res) => {
+        console.log("COMMAND:")
+        console.log(command)
+        console.log(res.data.choices)
+        message.channel.send(res.data.choices[0].text)
       });
-  });
+  }
 }
 
 function sickEm(message) {
