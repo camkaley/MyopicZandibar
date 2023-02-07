@@ -16,7 +16,7 @@ var target = "ReyneBowKitten#7296";
 // var target = "BiscuitMan#8864";
 
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: apiKeys.chatGTPKey,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -50,7 +50,7 @@ client.on("messageCreate", (message) => {
 
 async function chatGTP(message) {
   if (message.content.toLowerCase().startsWith("zandy")) {
-    var command = message.content.replace(/[^\s]*/, '');
+    var command = message.content.replace(/[^\s]*/, "");
     openai
       .createCompletion({
         model: "text-davinci-003",
@@ -62,10 +62,14 @@ async function chatGTP(message) {
         presence_penalty: 0.0,
       })
       .then((res) => {
-        console.log("COMMAND:")
-        console.log(command)
-        console.log(res.data.choices)
-        message.channel.send(res.data.choices[0].text)
+        console.log("COMMAND:");
+        console.log(command);
+        console.log(res.data.choices);
+        message.channel.send(res.data.choices[0].text);
+      })
+      .catch((err) => {
+        console.log(err);
+        message.channel.send("No");
       });
   }
 }
